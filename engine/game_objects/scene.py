@@ -7,6 +7,7 @@ import os
 
 from engine.game_objects.action import Action, Choice, Talk, GoTo
 from engine.game_objects.base import BaseGameObject
+from engine.game_objects.character import Character
 
 
 class Scene(BaseGameObject):
@@ -70,7 +71,7 @@ class Scene(BaseGameObject):
         return None
 
     @classmethod
-    def load(cls, path: str, characters: dict[str, 'Character'] = None, *args, **kwargs) -> 'Scene':
+    def load(cls, path: str, characters: dict[str, Character] = None, *args, **kwargs) -> 'Scene':
         """
         Loads a scene from a file.
 
