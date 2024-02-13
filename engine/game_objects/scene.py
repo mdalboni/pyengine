@@ -2,7 +2,10 @@
 This module contains the Scene class for the game engine.
 It includes methods for adding actions to a scene, executing the next action, loading a scene from a file, and translating and dumping a scene.
 """
-from engine.game_objects.action import Action, Choice
+import json
+import os
+
+from engine.game_objects.action import Action, Choice, Talk, GoTo
 from engine.game_objects.base import BaseGameObject
 
 
@@ -99,32 +102,13 @@ class Scene(BaseGameObject):
 
     def translate_and_dump(self, path: str, source: str, target: str, *args, **kwargs):
         """
-        Translates and dumps
-        the
-        scene.
+        Translates and dumps the scene.
 
-        :param
-        path: The
-        path
-        to
-        the
-        scene.
-        :param
-        source: The
-        source
-        language.
-        :param
-        target: The
-        target
-        language.
-        :param
-        args: Additional
-        positional
-        arguments.
-        :param
-        kwargs: Additional
-        keyword
-        arguments.
+        :param path: The path to the scene.
+        :param source: The source language.
+        :param target: The target language.
+        :param args: Additional positional arguments.
+        :param kwargs: Additional keyword arguments.
         """
         snapshot = self.__dict__.copy()
         output = {
