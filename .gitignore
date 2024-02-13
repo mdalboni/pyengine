@@ -5,3 +5,6 @@ venv/
 test_venv/
 *.egg-info/
 output/
+.idea/
+.pytest_cache/
+__pycache__/
