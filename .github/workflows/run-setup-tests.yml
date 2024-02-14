@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Execute Unit tests
+name: Execute Setup Tests
 
 on:
   push:
@@ -13,14 +13,14 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test-init-and-validate:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
+        python-version: "3.11"
     - name: Install project as a package
       run: |
         pip install .
@@ -28,15 +28,15 @@ jobs:
       run: |
         pyengine init example "my game"
     - name: Test created files
+      working-directory: ./example
       run: |
-        cd example
         pyengine validate
     - name: Test build process
       run: |
         pyengine build --output dist
     - name: Check folder contents
+      working-directory: ./example/dist
       run: |
-        cd dist
         files=("my game") # Add your file paths here
         for file in "${files[@]}"
         do
