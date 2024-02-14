@@ -82,7 +82,7 @@ SCENE_JSON_CONTENT = """
     },
     {
       "type": "choice",
-      "character": "your_character",
+      "character": "your character",
       "state": "default",
       "text": "<TEXT>",
       "choices": [
