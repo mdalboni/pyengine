@@ -7,6 +7,8 @@ and a function to create the project folder.
 import base64
 import os
 
+from cli.project_init.validate_file import VALIDATE_FILE_CONTENT
+
 from cli.project_init.build_file import BUILD_FILE_CONTENT
 from cli.project_init.character_file import (
     CHARACTER_FILE_CONTENT,
@@ -59,6 +61,7 @@ def init_project(project_path: str, project_name: str):
         '__main__.py': MAIN_FILE_CONTENT,
         'configuration.py': CONFIGURATION_FILE_CONTENT.format(game_title=project_name),
         'build.py': BUILD_FILE_CONTENT,
+        'validate.py': VALIDATE_FILE_CONTENT,
     }.items():
         with open(os.path.join(project_path, file), 'w') as game_file:
             game_file.write(content)

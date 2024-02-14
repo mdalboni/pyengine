@@ -1,7 +1,13 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
-from cli.parser import main, validate, validate_parsers, build_parsers, project_init_parsers
+from cli.parser import (
+    build_parsers,
+    main,
+    project_init_parsers,
+    validate,
+    validate_parsers,
+)
 
 
 class TestMainModule(unittest.TestCase):
@@ -22,7 +28,8 @@ class TestMainModule(unittest.TestCase):
     def test_validate(self, mock_sys, mock_popen):
         mock_process = MagicMock()
         mock_process.communicate.return_value = (
-            b'pygame 2.5.2 (SDL 2.28.3, Python 3.11.8)\nHello from the pygame community. https://www.pygame.org/contribute.html\nAnalyzing the graph...\n##########\nScene [new_scene_2] is not reachable\n##########\n',  # noqa
+            b'pygame 2.5.2 (SDL 2.28.3, Python 3.11.8)\nHello from the pygame community. https://www.pygame.org/contribute.html\nAnalyzing the graph...\n##########\nScene [new_scene_2] is not reachable\n##########\n',
+            # noqa
             'error'
         )
         mock_popen.return_value = mock_process
