@@ -193,8 +193,6 @@ class Game:
     def quit(self):
         """
         Quits the game.
-
-        :return: None
         """
         pygame.quit()
         sys.exit()
@@ -205,5 +203,10 @@ class Game:
 
         :return: None
         """
-        self.start()
-        self.quit()
+        try:
+            self.start()
+        except Exception as ex:
+            with open('error.log', 'w') as error_file:
+                error_file.write(f'An error occurred:\n{ex}')
+        finally:
+            self.quit()

@@ -22,6 +22,7 @@ class Scene(BaseGameObject):
     action: int
     actions: list[Action]
     history: list[Action]
+    outcomes: list[str]
 
     def __init__(self, name, background, *args, **kwargs):
         """
@@ -38,6 +39,7 @@ class Scene(BaseGameObject):
         self.actions = []
         self.history = []
         self.action = 0
+        self.outcomes = []
 
     def __str__(self):
         return (
@@ -51,9 +53,13 @@ class Scene(BaseGameObject):
 
         :param action: The action to be added.
         """
-        if self.actions:
-            if type(self.actions[len(self.actions) - 1]) is Choice:
-                raise Exception("You cannot add more actions to this scene")
+        if (
+                self.actions
+                and type(self.actions[len(self.actions) - 1]) in {Choice, GoTo}
+        ):
+            raise Exception("You cannot add more actions to this scene")
+        if action.go_to():
+            self.outcomes.extend(action.go_to())
         self.actions.append(action)
 
     def execute_next_action(self) -> Action | None:

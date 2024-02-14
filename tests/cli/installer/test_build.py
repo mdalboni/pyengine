@@ -22,7 +22,7 @@ class TestBuild(unittest.TestCase):
             'characters.py'
         ]
         # Call
-        build.build('output_path', 'project_path', ['platforms'], ['resolutions'], ['languages'])
+        build.build('output_path', 'project_path', ['resolutions'])
 
         # Assert
         mock_os.listdir.assert_called_once_with('project_path')

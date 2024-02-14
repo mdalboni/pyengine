@@ -31,6 +31,9 @@ class TestAction(unittest.TestCase):
         result = str(self.action)
         self.assertEqual(result, f"{self.action.type} - {self.character.name}[{self.character.state}]")
 
+    def test_go_to(self):
+        self.assertEqual(self.action.go_to(), None)
+
 
 class TestTalk(unittest.TestCase):
 
@@ -57,6 +60,9 @@ class TestTalk(unittest.TestCase):
         self.assertEqual(result['state'], 'STATE')
         self.assertEqual(result['type'], 'talk')
         self.assertEqual(result['text'], 'Bonjour')
+
+    def test_go_to(self):
+        self.assertEqual(self.talk.go_to(), None)
 
 
 class TestChoice(unittest.TestCase):
@@ -88,6 +94,9 @@ class TestChoice(unittest.TestCase):
         self.assertEqual(result['text'], 'Choisir')
         self.assertEqual(result['choices'], [{'go_to': '1', 'text': 'Un'}])
 
+    def test_go_to(self):
+        self.assertEqual(self.choice.go_to(), ['1'])
+
 
 class TestGoTo(unittest.TestCase):
 
@@ -99,7 +108,7 @@ class TestGoTo(unittest.TestCase):
         self.assertEqual(self.goto.character.name, 'Test Character')
         self.assertEqual(self.goto.character.state, 'STATE')
         self.assertEqual(self.goto.text, 'Go')
-        self.assertEqual(self.goto.go_to, '1')
+        self.assertEqual(self.goto._go_to, '1')
         self.assertEqual(self.goto.type, 'go_to')
 
     def test_goto_render(self):
@@ -118,3 +127,6 @@ class TestGoTo(unittest.TestCase):
         # Assuming the translation function works correctly, 'Go' in English translates to 'Aller' in French
         self.assertEqual(result['text'], 'Aller')
         self.assertEqual(result['go_to'], '1')
+
+    def test_go_to(self):
+        self.assertEqual(self.goto.go_to(), ['1'])

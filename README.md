@@ -18,13 +18,12 @@ pyengine init <folder_name> "<your_game_name>"
 
 ### Run Game
 ```bash
-python <folder_name>
-OR
-python __main__.py
+python .
 ```
 
 ### To build the game and its compressed data
 ```bash
+cd <folder_name>
 pyengine build --output <output_path> 
 ```
 

@@ -44,7 +44,6 @@ class GameBuilder:
 
         :param characters: A dictionary mapping character names to Character instances.
         :param output_folder: The output folder for the game.
-        :return: None
         """
         output_char_folder = os.path.join(output_folder, self.config.resource_folder, 'characters')
         output_scene_folder = os.path.join(output_folder, self.config.resource_folder, 'scenes')

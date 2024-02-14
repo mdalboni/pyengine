@@ -17,10 +17,17 @@ class TestMainModule(unittest.TestCase):
         self.parser.add_subparsers.assert_called_once()
         self.parser.parse_args.assert_called_once()
 
-    def test_validate(self):
-        with patch('cli.parser.print') as mock_print:
-            validate()
-            mock_print.assert_called_once_with("Validating...")
+    @patch('subprocess.Popen')
+    @patch('sys.exit')
+    def test_validate(self, mock_sys, mock_popen):
+        mock_process = MagicMock()
+        mock_process.communicate.return_value = (
+            b'pygame 2.5.2 (SDL 2.28.3, Python 3.11.8)\nHello from the pygame community. https://www.pygame.org/contribute.html\nAnalyzing the graph...\n##########\nScene [new_scene_2] is not reachable\n##########\n',  # noqa
+            'error'
+        )
+        mock_popen.return_value = mock_process
+        validate()
+        mock_sys.assert_called_once_with(-1)
 
     def test_validate_parsers(self):
         validate_parsers(self.subparsers)

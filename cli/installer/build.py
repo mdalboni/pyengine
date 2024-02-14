@@ -7,6 +7,8 @@ a function to build the game JSON files, and a function to validate the necessar
 import os
 import shutil
 import subprocess
+import platform
+import sys
 
 import PyInstaller.__main__ as py_installer
 
@@ -14,9 +16,7 @@ import PyInstaller.__main__ as py_installer
 def build(
         output_path: str,
         project_path: str,
-        platforms: list[str],
         resolutions: list[str],
-        languages: list[str]
 ):
     """
     Main build function. Prepares for building, validates files, builds game JSONs and the application.
@@ -28,14 +28,15 @@ def build(
     :param languages: The languages for which the game will be built.
     """
     print("Preparing for building...")
-    print("Platforms:", platforms)  # TODO select the platforms to be used
     print("Resolutions:", resolutions)  # TODO select the resolutions to be used
-    print("Languages:", languages)  # TODO display languages
-
-    validate_files(project_path)
-    build_main_path, game_name = build_game_jsons()
-    data_path = os.path.dirname(build_main_path)
-    build_app(build_main_path, data_path, game_name, output_path)
+    try:
+        validate_files(project_path)
+        build_main_path, game_name = build_game_jsons()
+        data_path = os.path.dirname(build_main_path)
+        build_app(build_main_path, data_path, game_name, output_path)
+    except Exception as e:
+        print(f'Build error: {e}')
+        sys.exit(-2)
 
 
 def build_app(build_main_path, data_path, game_name, output_path):
@@ -53,15 +54,14 @@ def build_app(build_main_path, data_path, game_name, output_path):
         '--clean',  # Clean PyInstaller cache and temporary files
         f'--distpath={output_path}',  # Output path
         f'--name={game_name}',  # Name of the executable
+        f'--add-data={data_path}{os_data_colon()}.',  # External data files
+        '--windowed'
     ]
-    data_files = [
-        f'--add-data={data_path};.',  # Add the resources folder to the executable
-    ]
-    py_installer.run(options + data_files)
+    py_installer.run(options)
     shutil.rmtree(data_path, ignore_errors=True)
 
 
-def build_game_jsons():
+def build_game_jsons() -> (str, str):
     """
     Builds the game JSON files by running the build.py script.
 
@@ -92,3 +92,12 @@ def validate_files(project_path):
         if file not in files:
             print("Missing file:", file)
             raise Exception("Missing file")  # TODO improve exceptions
+
+
+def os_data_colon():
+    os_name = platform.system()
+    match os_name:
+        case 'Windows':
+            return ';'
+        case _:
+            return ':'

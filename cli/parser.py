@@ -3,14 +3,7 @@ import os
 
 from cli.installer.build import build
 from cli.project_init import init_project
-
-
-def validate():
-    """
-    Validates the project. The specific validation steps are not implemented in this function.
-    """
-    print("Validating...")
-    # TODO implement the validation steps
+from cli.validate import validate
 
 
 def main():
@@ -30,7 +23,7 @@ def main():
         case "init":
             init_project(args.project_path, args.project_name)
         case "build":
-            build(args.output, os.getcwd(), args.platforms, args.resolutions, args.languages)
+            build(args.output, os.getcwd(), args.resolutions)
         case "validate":
             validate()
         case _:

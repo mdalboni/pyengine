@@ -34,6 +34,7 @@ from characters import YOUR_CHARACTER
 SCENE = Scene('new_scene', background='background.png')
 
 SCENE.add_action(Talk(character=YOUR_CHARACTER, text='This is a sample scene example'))
+SCENE.add_action(GoTo(character=YOUR_CHARACTER, go_to=None))
 """
 
 SAMPLE_STARTING_SCENE_FILE_CONTENT = """

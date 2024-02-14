@@ -37,6 +37,9 @@ class Action:
     def __str__(self):
         return f"{self.type} - {self.character.name}[{self.character.state}]"
 
+    def go_to(self) -> list[str] | None:
+        return None
+
 
 class Talk(Action):
     """
@@ -101,6 +104,9 @@ class Choice(Action):
         ]
         return output
 
+    def go_to(self) -> list[str]:
+        return [choice[0] for choice in self.choices]
+
 
 class GoTo(Action):
     """
@@ -112,7 +118,7 @@ class GoTo(Action):
     :param state: The state of the character.
     """
     text: str
-    go_to: str
+    _go_to: str
     type: str = 'go_to'
 
     def __init__(
@@ -125,16 +131,19 @@ class GoTo(Action):
     ):
         super().__init__(character, state, *args, **kwargs)
         self.text = text
-        self.go_to = go_to
+        self._go_to = go_to
 
     def render(self) -> dict:
         output = super().render()
         output['text'] = self.text
-        output['go_to'] = self.go_to
+        output['go_to'] = self._go_to
         return output
 
     def dump(self, src: str, target: str, *args, **kwargs) -> dict:
         output = super().dump(*args, **kwargs)
         output['text'] = translate(self.text, src, target)
-        output['go_to'] = self.go_to
+        output['go_to'] = self._go_to
         return output
+
+    def go_to(self) -> list[str] | None:
+        return [self._go_to]

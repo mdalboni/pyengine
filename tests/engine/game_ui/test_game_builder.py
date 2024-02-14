@@ -34,11 +34,13 @@ class TestGameBuilder(unittest.TestCase):
         mock_dump.assert_called_once()
         mock_move_to_output_folder.assert_called_once()
 
+    @patch('os.path.isfile')
     @patch('os.makedirs')
     @patch('shutil.copy')
     @patch('os.listdir')
-    def test_game_builder_move_to_output_folder(self, mock_listdir, mock_copy, mock_makedirs):
+    def test_game_builder_move_to_output_folder(self, mock_listdir, mock_copy, mock_makedirs, mock_is_file):
         mock_listdir.return_value = ['file1', 'file2']
+        mock_is_file.return_value = True
         self.game_builder._move_to_output_folder('source', 'output')
         mock_makedirs.assert_called_once_with('output', exist_ok=True)
         self.assertEqual(mock_copy.call_count, 2)
