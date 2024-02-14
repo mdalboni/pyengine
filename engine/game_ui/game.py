@@ -119,6 +119,9 @@ class Game:
         """
         game_state = "select_language"
         running = True
+        if self.debug:
+            print('Debug mode active, skipping language selection.')
+            game_state = "menu"
         while running:
             if game_state == "select_language":
                 default_lang = self.configuration.language
