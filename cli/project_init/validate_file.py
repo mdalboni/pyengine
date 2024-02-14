@@ -20,9 +20,12 @@ if __name__ == "__main__":
                 hit_list[scene.name]['go_to'].append(outcome)
                 hit_list[outcome]['origins'].append(scene.name)
 
+    print('Analyzing the graph...')
+    print('#' * 10)
     for scene, data in hit_list.items():
         if scene == 'start':
             continue
         if len(data['origins']) == 0:
             print(f"Scene [{scene}] is not reachable")
+    print('#' * 10)
 """

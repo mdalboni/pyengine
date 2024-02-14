@@ -30,8 +30,10 @@ jobs:
     - name: Test created files
       working-directory: ./example
       run: |
+        ls
         pyengine validate
     - name: Test build process
+      working-directory: ./example
       run: |
         pyengine build --output dist
     - name: Check folder contents

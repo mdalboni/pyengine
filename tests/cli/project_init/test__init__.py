@@ -18,10 +18,11 @@ class TesProjectInitModule(unittest.TestCase):
     @patch('cli.project_init._create_project_folder')
     @patch('cli.project_init.print')
     @patch('cli.project_init.open', new_callable=MagicMock)
-    def test_init_project(self, mock_open, mock_print, mock_create_project_folder):
+    def test_init_project(self, mock_open: MagicMock, mock_print, mock_create_project_folder):
         init_module.init_project(self.project_path, self.project_name)
         mock_create_project_folder.assert_called()
         mock_print.assert_called_with("Project initialized.")
+        assert mock_open.call_count == 15
 
     @patch('cli.project_init._create_project_folder')
     @patch('cli.project_init.open', new_callable=MagicMock)

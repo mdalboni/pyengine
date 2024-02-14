@@ -125,7 +125,7 @@ class GoTo(Action):
             self,
             character: Character,
             text: str,
-            go_to: str,
+            go_to: str = None,
             state: str = None,
             *args, **kwargs
     ):
