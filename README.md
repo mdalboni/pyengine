@@ -1,11 +1,14 @@
 # PyEngine
 
-This is a sample game engine created with python and pygame.
+This is a sample game engine created with Python and Pygame.
 
 
 ## Installation
 
-You can clone this repo and use pip install on it.
+You can clone this repo and use pip install on it from Git Hub directly.
+```bash
+pip install git+https://github.com/mdalboni/pyengine
+```
 
 ## Usage
 
@@ -18,6 +21,7 @@ pyengine init <folder_name> "<your_game_name>"
 
 ### Run Game
 ```bash
+cd <folder_name>
 python .
 ```
 
