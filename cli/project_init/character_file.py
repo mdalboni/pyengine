@@ -5,7 +5,7 @@ YOUR_CHARACTER = Character('your character', states={'default': 'your_character.
 YOUR_CHARACTER_FROM_JSON = Character.load('resources/characters/your_character_json.json')
 
 CHARACTERS = {
-    'YOUR_CHARACTER': YOUR_CHARACTER,
+    'YOUR CHARACTER': YOUR_CHARACTER,
     'YOUR_CHARACTER_FROM_JSON': YOUR_CHARACTER_FROM_JSON,
 }
 """
