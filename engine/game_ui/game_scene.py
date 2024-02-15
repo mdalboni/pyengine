@@ -43,7 +43,7 @@ def play_scene(scene: Scene, renderer: GameSceneRenderer) -> (str, str):
                         elif choices and event.key == pygame.K_DOWN:
                             selected_item = (selected_item + 1) % len(choices)
                         elif choices and event.key == pygame.K_RETURN:
-                            return choices[selected_item][0], 'gameplay'
+                            return choices[selected_item][0], 'gameplay' if choices[selected_item][0] else 'game_over'
                     elif go_to:
                         return go_to, 'gameplay'
                     else:

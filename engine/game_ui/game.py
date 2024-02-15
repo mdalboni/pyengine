@@ -53,6 +53,9 @@ class Game:
                 hud_renderer=HUDRenderer(self.screen, self.configuration.resource_folder)
             )
             pygame.display.set_caption(self.configuration.game_title)
+        self._user_folder_path = os.path.join(os.path.expanduser("~"), self.configuration.game_title)
+        os.makedirs(self._user_folder_path, exist_ok=True)
+        self._save_file_path = os.path.join(self._user_folder_path, 'game_data')
 
     def select_language(self):
         """
@@ -89,7 +92,8 @@ class Game:
         """
         selected_item = 0
         menu_items = ["Start Game", "Load Game", "Quit"]
-
+        if not self._has_save_file():
+            menu_items.pop(1)
         running = True
         while running:
             self.menu_renderer.render(selected_item, menu_items)
@@ -97,19 +101,24 @@ class Game:
                 if event.type == pygame.QUIT:
                     return "quit"
                 elif event.type == pygame.KEYDOWN:
-                    print('selected_item:', selected_item, menu_items[selected_item - 1])
                     if event.key == pygame.K_UP:
                         selected_item = (selected_item - 1) % len(menu_items)
                     elif event.key == pygame.K_DOWN:
                         selected_item = (selected_item + 1) % len(menu_items)
                     elif event.key == pygame.K_RETURN:
-                        if selected_item == 0:
-                            return "gameplay"
-                        elif selected_item == 1:
-                            return "quit"
+                        match menu_items[selected_item]:
+                            case "Start Game":
+                                return 'gameplay'
+                            case "Load Game":
+                                return "load_game"
+                            case _:
+                                return 'quit'
                     elif event.key == pygame.K_ESCAPE:
                         return "quit"
             pygame.display.flip()
+
+    def _has_save_file(self) -> bool:
+        return os.path.exists(self._save_file_path)
 
     def start(self):
         """
@@ -134,23 +143,43 @@ class Game:
                 self.active_scene = 'start'
                 game_state = self.show_menu()
             elif game_state == "gameplay":
-                print('Scene:', self.scenes[self.active_scene].name)
-                # TODO Move to a class with the common interface
-                output, game_state = play_scene(
-                    self.scenes[self.active_scene],
-                    self.renderer,
-                )
-                if output:
-                    self.active_scene = output
+                game_state, output = self._gameplay(game_state)
+                self._handle_save_file(game_state, output)
             elif game_state == "load_game":
-                print('Not supported yet ignoring')
-                game_state = "menu"
+                game_state = self._load_game_data(game_state)
             elif game_state == "game_over":
                 game_state = 'menu'
             elif game_state == "quit":
                 running = False
 
             pygame.display.flip()
+
+    def _handle_save_file(self, game_state, output):
+        if game_state == 'game_over' and self._has_save_file():
+            print('Removing save file, game was completed')
+            os.remove(self._save_file_path)
+        elif output and game_state != 'game_over':
+            with open(self._save_file_path, 'w') as file:
+                file.write(output)
+
+    def _gameplay(self, game_state):
+        print('Scene:', self.scenes[self.active_scene].name)
+        # TODO Move to a class with the common interface
+        output, game_state = play_scene(
+            self.scenes[self.active_scene],
+            self.renderer,
+        )
+        self.scenes[self.active_scene].action = 0
+        self.active_scene = output
+        return game_state, output
+
+    def _load_game_data(self, game_state):
+        with open(self._save_file_path, 'r') as file:
+            loaded_scene = file.read()
+            if loaded_scene in self.scenes:
+                self.active_scene = loaded_scene
+                game_state = 'gameplay'
+        return game_state
 
     def add_scene(self, scene: Scene):
         """
