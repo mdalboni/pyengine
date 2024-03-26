@@ -1,5 +1,6 @@
 import subprocess
 import sys
+from security import safe_command
 
 
 def validate():
@@ -7,7 +8,7 @@ def validate():
     Validates the project. The specific validation steps are not implemented in this function.
     """
     cmd = 'python validate.py'
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    p = safe_command.run(subprocess.Popen, cmd, stdout=subprocess.PIPE, shell=True)
     out, err = p.communicate()
     invalid_scenes = out.decode().split('#' * 10)[-2].split('\n')[1:-1]
     if invalid_scenes:
