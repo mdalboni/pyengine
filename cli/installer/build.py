@@ -68,7 +68,7 @@ def build_game_jsons() -> (str, str):
     :return: The path of the main build file and the name of the game.
     """
     cmd = 'python build.py'
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=False)
     out, err = p.communicate()
     build_main_path, game_name = out.decode().split('\n')[-2:][0].split('#')[1:3]
     return build_main_path, game_name
